@@ -1,0 +1,128 @@
+---
+title: "Loops and Functions"
+author: "Carmen"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## Task 1
+
+```{r}
+library(tidyverse)
+
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+transects <- c("Transect A", "Transect B", "Transect C")
+
+out_matrix <- matrix(nrow = length(weekdays), ncol = length(transects))
+
+for (i in seq_along(weekdays)) {
+  for (j in seq_along(transects)) {
+    elements <- paste(weekdays[i], "-", transects[j])
+    out_matrix[i, j] <- elements
+  }
+}
+
+```
+
+## Task 2
+
+```{r}
+force <- function(mass, acceleration) {
+  force <- mass * acceleration
+  print(paste("The resulting force is", force, "Newtons."))
+}
+
+force(4,5)
+```
+
+## Task 3
+
+```{r}
+library(dplyr)
+
+fish_parms <- data.frame(sci_name = c("Chanos chanos", "Sphyraena barracuda", "Caranx ignobilis"), common_name = c("Milkfish", "Great barracuda", "Giant trevally"), a_est = c(0.0905, 0.0181, 0.0353), b_est = c(2.52, 3.27, 3.05))
+
+fish_weight <- function(fish_name, tot_length) {
+  fish_spec <- fish_parms[fish_parms$common_name == fish_name,]
+  fish_weight <- fish_spec$a_est * (tot_length ^ fish_spec$b_est)
+  return(fish_weight)
+}
+
+#fish_spec <- filter(fish_parms$common_name == "Milkfish")
+
+fish_weight("Giant trevally", 3)
+
+lengths_vec <- seq(from = 0, to = 100, by =1)
+
+milkfish_weights <- vector("numeric", length(lengths_vec))
+
+for (i in seq_along(lengths_vec)) {
+  milkfish_weights[i] <- fish_weight("Milkfish", lengths_vec[i])
+}
+
+#come back and do for all fish species
+```
+
+## Task 4
+
+```{r}
+wave_power <- function(height, period) {
+  power <- 0.5 * (height ^ 2) * period
+  return(power)
+}
+
+wave_power(1, 8)
+
+wave_heights <- seq(from = 0, to = 3, by = 0.2)
+
+wave_power_vec <- vector("numeric", length(wave_heights))
+
+for (i in seq_along(wave_heights)) {
+  wave_power_vec[i] <- wave_power(wave_heights[i], 8)
+}
+
+wave_power_vec
+```
+
+## Task 5
+
+```{r}
+#----
+wave_power_deep <- function(height, period) {
+  power <- 0.5 * (height ^ 2) * period
+  return(power)
+}
+
+wave_power_shallow <- function(height, period) {
+  power <- 0.81 * (height ^ 2) * period
+  return(power)
+}
+
+#----
+
+wave_nrg <- function(depth, height, period) {
+  if (depth > 12) {
+    wave_power_deep <- function(height, period) {
+      power <- 0.5 * (height ^ 2) * period
+      return(power)
+      }
+    message("This is deep!")
+  } else if (depth <= 12) {
+      wave_power_shallow <- function(height, period) {
+      power <- 0.81 * (height ^ 2) * period
+    return(power)
+    }
+    message("This is shallow!")
+  }
+}
+
+wave_nrg(15, 8, 5)
+```
+
+
+
+
+
+
